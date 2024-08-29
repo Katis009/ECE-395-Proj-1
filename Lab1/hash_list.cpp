@@ -1,20 +1,84 @@
 #include "hash_list.h"
 
-hash_list::hash_list() {}
+hash_list::hash_list() {
+    head = NULL;
+    size = 0;
+}
 
 /**-----------------------------------------------------------------------------------
  * START Part 1
  *------------------------------------------------------------------------------------*/
 
-void hash_list::insert(int key, float value) {}
 
-std::optional<float> hash_list::get_value(int key) const { return std::nullopt; }
+void hash_list::insert(int key, float value) {
 
-bool hash_list::remove(int key) { return false; }
+    node *curr = head;
+    while (curr != NULL){
+        if (key == curr->key){
+            curr->value = value;
+            return;
+        }
+        curr = curr->next;
+    }
+    node *newNode = new node();
+    newNode->key = key;
+    newNode->value = value;
+    newNode->next = head;
+    head = newNode;
+    return;
 
-size_t hash_list::get_size() const { return 0; }
+}
 
-hash_list::~hash_list() {}
+std::optional<float> hash_list::get_value(int key) const { 
+    node *curr = head;
+    while (curr != NULL){
+        if (curr->key == key){
+            return curr->value;
+        }
+        curr = curr->next;
+    }
+    
+    return std::nullopt; 
+}
+
+bool hash_list::remove(int key) { 
+    
+    if (head->key == key){
+        node *delMe = head;
+        head = head->next;
+        delete delMe;
+        return true;
+    }
+
+    node *curr = head;
+    while (curr->next != NULL){
+        if (curr->next->key == key){
+            node *temp = curr->next;
+            curr->next = temp->next;
+            delete temp;
+            return true;
+        }
+        curr = curr->next;
+    }
+    
+    return false; 
+}
+
+size_t hash_list::get_size() const { 
+    int var = size;       //do i need const here?
+    return var;
+    return 0; 
+}
+
+hash_list::~hash_list() {
+
+    while (head != NULL){
+        node *temp = head;
+        head = head->next;
+        delete temp;
+    }
+
+}
 
 /**-----------------------------------------------------------------------------------
  * END Part 1
